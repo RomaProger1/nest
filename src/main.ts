@@ -1,7 +1,8 @@
-import { NestFactory } from "@nestjs/core";// Экземпляр приложения, который вызываем из nestjs/core
-import { AppModule } from "./app.module";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-
+import {NestFactory} from "@nestjs/core"; // Экземпляр приложения, который вызываем из nestjs/core
+import {AppModule} from "./app.module";
+import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
+import {JwtAuthGuard} from "./auth/jwt-auth.guard";
+import {ValidationPipe} from "./pipes/validation.pipe";
 
 
 async function start(){
@@ -16,6 +17,9 @@ async function start(){
     .build()
     const document = SwaggerModule.createDocument(app,config);
     SwaggerModule.setup('/api/docs',app,document)
+
+    app.useGlobalPipes(new ValidationPipe())
+    
     await app.listen(PORT, () => console.log(`Server started on port = ${PORT}`))
 }
 
